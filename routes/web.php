@@ -55,6 +55,7 @@ Route::middleware('auth')->group(function () {
 
         // Commandes
         Route::get('/orders', [ClientController::class, 'myOrders'])->name('orders');
+        Route::get('/client/orders', [ClientController::class, 'myOrders'])->name('client.orders')->middleware('auth');
         Route::get('/orders/{id}', [ClientController::class, 'orderDetail'])->name('order.show');
         Route::post('/orders', [OrderController::class, 'store'])->name('order.store');
     });

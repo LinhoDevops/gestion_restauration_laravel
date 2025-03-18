@@ -1,4 +1,3 @@
-<!-- gestionnaire/orders/show.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Détail de la commande')
@@ -102,10 +101,16 @@
                                 </div>
 
                                 <!-- Paiement info -->
-                                @if($order->status == 'payée')
+                                @if($order->status == 'payée' && isset($payment))
                                     <div class="alert alert-success">
                                         <h6 class="mb-2">Informations de paiement</h6>
-                                        <p class="mb-1"><strong>Date :</strong> {{ $payment->paid_at->format('d/m/Y H:i') }}</p>
+                                        <p class="mb-1"><strong>Date :</strong>
+                                            @if(is_object($payment->paid_at) && method_exists($payment->paid_at, 'format'))
+                                                {{ $payment->paid_at->format('d/m/Y H:i') }}
+                                            @else
+                                                {{ $payment->paid_at }}
+                                            @endif
+                                        </p>
                                         <p class="mb-0"><strong>Montant :</strong> {{ number_format($payment->amount, 0, ',', ' ') }} FCFA</p>
                                     </div>
                                 @endif
@@ -124,14 +129,20 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($order->items as $item)
+                                @if(isset($order->items) && is_array($order->items) && !empty($order->items))
+                                    @foreach($order->items as $item)
+                                        <tr>
+                                            <td>{{ $item['product_name'] ?? 'Produit inconnu' }}</td>
+                                            <td>{{ number_format($item['price'] ?? 0, 0, ',', ' ') }} FCFA</td>
+                                            <td>{{ $item['quantity'] ?? 1 }}</td>
+                                            <td>{{ number_format(($item['price'] ?? 0) * ($item['quantity'] ?? 1), 0, ',', ' ') }} FCFA</td>
+                                        </tr>
+                                    @endforeach
+                                @else
                                     <tr>
-                                        <td>{{ $item['product_name'] }}</td>
-                                        <td>{{ number_format($item['price'], 0, ',', ' ') }} FCFA</td>
-                                        <td>{{ $item['quantity'] }}</td>
-                                        <td>{{ number_format($item['price'] * $item['quantity'], 0, ',', ' ') }} FCFA</td>
+                                        <td colspan="4" class="text-center">Détails des produits non disponibles</td>
                                     </tr>
-                                @endforeach
+                                @endif
                                 </tbody>
                                 <tfoot>
                                 <tr>

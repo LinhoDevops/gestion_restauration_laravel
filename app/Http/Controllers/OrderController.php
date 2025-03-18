@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\NewOrderNotification;
 use App\Models\User;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -113,6 +115,7 @@ class OrderController extends Controller
             return redirect()->back()->with('error', 'Une erreur est survenue lors du traitement de votre commande. Veuillez réessayer.');
         }
     }
+
     public function updateStatus(Request $request, $id)
     {
         $order = Order::findOrFail($id);
@@ -138,9 +141,15 @@ class OrderController extends Controller
         // Récupérer la commande par son ID
         $order = Order::findOrFail($id);
 
+        // Récupérer le paiement associé si la commande est payée
+        $payment = null;
+        if ($order->status == 'payée') {
+            $payment = Payment::where('order_id', $order->id)->latest()->first();
+        }
+
         // Vérifier les autorisations
         if (auth()->user()->hasRole('gestionnaire')) {
-            return view('gestionnaire.orders.show', compact('order'));
+            return view('gestionnaire.orders.show', compact('order', 'payment'));
         } else if (auth()->id() === $order->user_id) {
             return view('client.order-detail', compact('order'));
         } else {

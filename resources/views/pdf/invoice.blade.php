@@ -112,14 +112,20 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($order->items as $item)
+        @if(isset($order->items) && is_array($order->items) && !empty($order->items))
+            @foreach($order->items as $item)
+                <tr>
+                    <td>{{ $item['product_name'] ?? 'Produit inconnu' }}</td>
+                    <td>{{ number_format($item['price'] ?? 0, 0, ',', ' ') }} FCFA</td>
+                    <td>{{ $item['quantity'] ?? 1 }}</td>
+                    <td>{{ number_format(($item['price'] ?? 0) * ($item['quantity'] ?? 1), 0, ',', ' ') }} FCFA</td>
+                </tr>
+            @endforeach
+        @else
             <tr>
-                <td>{{ $item['product_name'] }}</td>
-                <td>{{ number_format($item['price'], 0, ',', ' ') }} FCFA</td>
-                <td>{{ $item['quantity'] }}</td>
-                <td>{{ number_format($item['price'] * $item['quantity'], 0, ',', ' ') }} FCFA</td>
+                <td colspan="4" class="text-center">Détails des produits non disponibles</td>
             </tr>
-        @endforeach
+        @endif
         </tbody>
     </table>
 
@@ -127,7 +133,13 @@
         <p><strong>Sous-total:</strong> {{ number_format($order->total_price, 0, ',', ' ') }} FCFA</p>
         <p><strong>Livraison:</strong> 0 FCFA</p>
         <p class="total"><strong>Total:</strong> {{ number_format($order->total_price, 0, ',', ' ') }} FCFA</p>
-        <p><strong>Date de paiement:</strong> {{ $payment->paid_at->format('d/m/Y') }}</p>
+        <p><strong>Date de paiement:</strong>
+            @if(is_object($payment->paid_at) && method_exists($payment->paid_at, 'format'))
+                {{ $payment->paid_at->format('d/m/Y') }}
+            @else
+                {{ $payment->paid_at }}
+            @endif
+        </p>
         <p><strong>Méthode de paiement:</strong> Espèces</p>
     </div>
 

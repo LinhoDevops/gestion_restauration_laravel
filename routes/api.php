@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClientController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -32,6 +33,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // Routes pour les commandes
     Route::post('/orders', [OrderController::class, 'store']);
+    Route::get('/client/orders', [ClientController::class, 'myOrders'])->name('client.orders')->middleware('auth');
     Route::get('/orders', [OrderController::class, 'index'])->middleware('role:gestionnaire');
     Route::get('/orders/{id}', [OrderController::class, 'show']);
     Route::put('/orders/{id}', [OrderController::class, 'update'])->middleware('role:gestionnaire');

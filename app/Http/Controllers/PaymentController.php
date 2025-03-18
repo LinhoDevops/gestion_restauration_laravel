@@ -18,6 +18,7 @@ class PaymentController extends Controller
     }
 
     // Enregistrer un paiement
+// Enregistrer un paiement
     public function store(Request $request)
     {
         $request->validate([
@@ -27,8 +28,8 @@ class PaymentController extends Controller
 
         $order = Order::findOrFail($request->order_id);
 
-        if ($order->status === 'payee') {
-            return response()->json(['error' => 'Cette commande est déjà payée'], 400);
+        if ($order->status === 'payée') {
+            return redirect()->back()->with('error', 'Cette commande est déjà payée');
         }
 
         $payment = Payment::create([
@@ -37,20 +38,32 @@ class PaymentController extends Controller
             'paid_at' => Carbon::now(),
         ]);
 
-        $order->update(['status' => 'payee']);
+        // Mise à jour du statut de la commande
+        $order->update(['status' => 'payée']);
 
-        // jenere la facture PDF
-        $pdf = PDF::loadView('pdf.invoice', compact('order', 'payment'));
-        $pdfPath = storage_path("app/public/invoices/invoice_{$order->id}.pdf");
-        $pdf->save($pdfPath);
+        try {
+            // Créer le répertoire s'il n'existe pas
+            if (!file_exists(storage_path('app/public/invoices'))) {
+                mkdir(storage_path('app/public/invoices'), 0755, true);
+            }
 
-        // evoyer la facture par email - TEMPORAIREMENT à vous-même pour tester
-        Mail::to('aliou.18.ndour@gmail.com')->send(new InvoiceMail($order, $pdfPath));
+            // Générer la facture PDF
+            $pdf = PDF::loadView('pdf.invoice', compact('order', 'payment'));
+            $pdfPath = storage_path("app/public/invoices/invoice_{$order->id}.pdf");
+            $pdf->save($pdfPath);
 
-        return response()->json([
-            'message' => 'Paiement enregistré et facture envoyée par email',
-            'payment' => $payment,
-            'invoice_url' => url("/storage/invoices/invoice_{$order->id}.pdf"),
-        ]);
+            // Envoyer la facture par email
+            Mail::to('aliou.18.ndour@gmail.com')->send(new InvoiceMail($order, $pdfPath));
+
+            return redirect()->back()->with('success', 'Paiement enregistré et facture envoyée par email');
+        } catch (\Exception $e) {
+            // Log l'erreur
+            Log::error('Erreur lors de la génération de la facture', [
+                'error' => $e->getMessage(),
+                'order_id' => $order->id
+            ]);
+
+            return redirect()->back()->with('success', 'Paiement enregistré mais une erreur est survenue lors de la génération de la facture');
+        }
     }
 }

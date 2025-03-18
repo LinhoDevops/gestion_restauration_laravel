@@ -67,15 +67,22 @@ class ClientController extends Controller
         return view('client.product-detail', compact('product'));
     }
 
-    // Reste du contrôleur nécessitant l'authentification
+    // Méthode myOrders corrigée pour afficher la liste des commandes de l'utilisateur
     public function myOrders()
     {
-        $orders = Order::where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        // Vérifiez si l'utilisateur est authentifié
+        if (auth()->check()) {
+            // Récupérer les commandes de l'utilisateur connecté
+            $orders = Order::where('user_id', auth()->id())
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
 
-        return view('client.my-orders', compact('orders'));
+            return view('client.my-orders', compact('orders'));
+        } else {
+            return redirect()->route('login')->with('error', 'Vous devez être connecté pour voir vos commandes.');
+        }
     }
+
 
     public function orderDetail($id)
     {
