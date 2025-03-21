@@ -197,3 +197,4 @@ class CartController extends Controller
         $cart['total'] = $total;
     }
 }
+

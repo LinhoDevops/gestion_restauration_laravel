@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+     triggers {
+        githubPush()
+    }
+
+
     environment {
         // Définir les variables d'environnement
         APP_NAME = 'isi-burger'
@@ -20,12 +25,34 @@ pipeline {
             }
         }
 
-        stage('Installation de Composer') {
+         stage('Installation de Composer locale') {
             steps {
-                // Installer Composer
-        sh 'docker run --rm -v $(pwd):/app composer install'
-        echo 'Composer installé avec succès'
-          }
+                script {
+                    def composerInstalled = sh(script: 'which composer || echo "not found"', returnStdout: true).trim()
+                    if (composerInstalled.contains("not found")) {
+                        sh '''
+                        curl -sS https://getcomposer.org/installer | php
+                        chmod +x composer.phar
+                        mv composer.phar composer
+                        export PATH=$PATH:$(pwd)
+                        '''
+                        echo "Composer installé localement"
+                    }
+                }
+            }
+        }
+
+        tage('Installation des dépendances') {
+            steps {
+                script {
+                    def composerInstalled = sh(script: 'which composer || echo "not found"', returnStdout: true).trim()
+                    if (!composerInstalled.contains("not found")) {
+                        sh 'composer install --no-interaction --no-progress'
+                    } else {
+                        sh './composer install --no-interaction --no-progress'
+                    }
+                }
+            }
         }
 
         stage('Configuration de l\'environnement') {
