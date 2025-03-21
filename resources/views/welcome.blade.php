@@ -9,7 +9,7 @@
         <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img class="w-100" src="{{ asset('img/burger-carousel-1.jpg') }}" alt="Image">
+                    <img class="w-50"  src="{{ asset('img/burger-carousel-1.jpg') }}" alt="Image">
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                         <div class="p-3" style="max-width: 700px;">
                             <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown">ISI BURGER</h6>
@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img class="w-100" src="{{ asset('img/burger-carousel-2.jpg') }}" alt="Image">
+                    <img class="w-50" src="{{ asset('img/burger-carousel-2.jpg') }}" alt="Image">
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                         <div class="p-3" style="max-width: 700px;">
                             <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown">ISI BURGER</h6>
@@ -228,7 +228,7 @@
                         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.{{ $loop->iteration % 3 + 1 }}s">
                             <div class="card product-card shadow rounded overflow-hidden">
                                 <div class="position-relative">
-                                    <img  class="img-fluid" src="{{ $product->image_url }}" alt="{{ $product->name }}">
+                                    <img  class=" img-fluid w-100" style="max-height: 250px";  src="{{ $product->image_url }}" alt="{{ $product->name }}">
                                     <small class="position-absolute start-0 top-100 translate-middle-y bg-burger text-white rounded py-1 px-3 ms-4">{{ number_format($product->price, 0, ',', ' ') }} FCFA</small>
                                 </div>
                                 <div class="p-4 mt-2">
