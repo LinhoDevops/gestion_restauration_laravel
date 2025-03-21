@@ -1,0 +1,30 @@
+# Git
+.git
+.gitignore
+
+# Dépendances
+/vendor
+/node_modules
+
+# Fichiers de configuration
+.env
+.env.example
+
+# Fichiers de build
+/public/hot
+/public/storage
+/public/build
+/storage/*.key
+
+# Fichiers de cache
+/bootstrap/cache
+
+# Logs
+/storage/logs
+
+# Tests
+/tests
+
+# Fichiers système
+.DS_Store
+Thumbs.db

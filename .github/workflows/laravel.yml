@@ -1,0 +1,88 @@
+name: Laravel CI/CD Workflow
+on:
+  push:
+    branches:
+      - 'nom_prenom_burger'
+  pull_request:
+    branches:
+      - 'nom_prenom_burger'
+
+jobs:
+  laravel-tests:
+    runs-on: ubuntu-latest
+
+    # Services pour la base de données PostgreSQL
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: linho
+          POSTGRES_PASSWORD: linho
+          POSTGRES_DB: isi_burger_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, bcmath, xml, ctype, fileinfo, openssl, pdo, pgsql
+          coverage: none
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+      - name: Install Composer Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Install NPM Dependencies
+        run: npm install
+
+      - name: Prepare Environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Configure Database Connection
+        run: |
+          sed -i 's/DB_CONNECTION=mysql/DB_CONNECTION=pgsql/' .env
+          sed -i 's/DB_HOST=127.0.0.1/DB_HOST=localhost/' .env
+          sed -i 's/DB_PORT=3306/DB_PORT=5432/' .env
+          sed -i 's/DB_DATABASE=laravel/DB_DATABASE=isi_burger_test/' .env
+          sed -i 's/DB_USERNAME=root/DB_USERNAME=linho/' .env
+          sed -i 's/DB_PASSWORD=/DB_PASSWORD=linho/' .env
+
+      - name: Clear Configuration
+        run: php artisan config:clear
+
+      - name: Run Database Migrations
+        run: php artisan migrate:fresh --seed
+
+      - name: Run Tests
+        run: php artisan test
+
+      - name: Build Frontend
+        run: npm run build
+
+      - name: Build Docker Image
+        run: docker build -t isi-burger-app .
+
+      - name: Push to Docker Hub
+        run: |
+         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+         docker push votre-nom-utilisateur/isi-burger-app

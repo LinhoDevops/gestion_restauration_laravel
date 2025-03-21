@@ -15,7 +15,7 @@
                     </div>
                     <div class="h-100 d-inline-flex align-items-center py-2">
                         <i class="fa fa-phone-alt text-burger me-2"></i>
-                        <p class="mb-0">+221 76 123 4567</p>
+                        <p class="mb-0">+221 76 561 68 68</p>
                     </div>
                 </div>
                 <div class="col-lg-5 px-5 text-end">

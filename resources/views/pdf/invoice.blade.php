@@ -82,8 +82,8 @@
 <div class="container">
     <div class="header">
         <div class="logo">ISI BURGER</div>
-        <p>123 Avenue Senghor, Dakar, Sénégal<br>
-            Tél: +221 76 123 4567 | Email: info@isiburger.com</p>
+        <p>Avenue Blaise DIAGNE , Dakar, Sénégal<br>
+            Tél: +221 76 561 68 68 | Email: info@isiburger.com</p>
     </div>
 
     <div class="invoice-title">FACTURE</div>

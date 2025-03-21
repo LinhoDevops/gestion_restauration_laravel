@@ -151,10 +151,10 @@
                         <h4 class="section-title text-start text-burger text-uppercase mb-4">Aide & Support</h4>
                         <p>Des questions sur votre commande ? N'hésitez pas à nous contacter par téléphone ou par email.</p>
                         <div class="bg-burger text-center p-4 mb-4">
-                            <h5 class="text-white m-0">+221 76 123 4567</h5>
+                            <h5 class="text-white m-0">+221 76 561 68 68</h5>
                         </div>
                         <p class="mb-2"><i class="fa fa-envelope text-burger me-2"></i>info@isiburger.com</p>
-                        <p class="mb-2"><i class="fa fa-map-marker-alt text-burger me-2"></i>123 Avenue Senghor, Dakar, Sénégal</p>
+                        <p class="mb-2"><i class="fa fa-map-marker-alt text-burger me-2"></i> Avenue Blaise DIAGNE, Dakar , Sénégal</p>
                     </div>
                 </div>
             </div>

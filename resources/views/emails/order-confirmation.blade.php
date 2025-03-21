@@ -77,7 +77,7 @@
 <div class="container">
     <div class="header">
         <div class="logo">ISI BURGER</div>
-        <p>123 Avenue Senghor, Dakar, Sénégal</p>
+        <p>Avenue Blaise DIAGNE, Dakar, Sénégal</p>
     </div>
 
     <div class="content">
@@ -119,7 +119,7 @@
 
     <div class="footer">
         <p>© {{ date('Y') }} ISI BURGER. Tous droits réservés.</p>
-        <p>Pour toute question, contactez-nous au +221 76 123 4567 ou par email à info@isiburger.com</p>
+        <p>Pour toute question, contactez-nous au +221 76 561 68 68 ou par email à info@isiburger.com</p>
     </div>
 </div>
 </body>
