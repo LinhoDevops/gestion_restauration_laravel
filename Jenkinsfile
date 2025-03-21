@@ -1,15 +1,14 @@
 pipeline {
-    agent any
-
-     triggers {
-        githubPush()
-    }
-
-     docker {
-        image 'php:8.2-apache'
+    agent {
+        docker {
+            image 'php:8.2-apache'
             args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
+    }
 
+    triggers {
+        githubPush()
+    }
 
     environment {
         // Définir les variables d'environnement
@@ -30,7 +29,7 @@ pipeline {
             }
         }
 
-         stage('Installation de Composer locale') {
+        stage('Installation de Composer locale') {
             steps {
                 script {
                     def composerInstalled = sh(script: 'which composer || echo "not found"', returnStdout: true).trim()
@@ -51,11 +50,11 @@ pipeline {
             steps {
                 script {
                     def composerInstalled = sh(script: 'which composer || echo "not found"', returnStdout: true).trim()
-            if (!composerInstalled.contains("not found")) {
+                    if (!composerInstalled.contains("not found")) {
                         sh 'composer install --no-interaction --no-progress'
-            } else {
+                    } else {
                         sh './composer install --no-interaction --no-progress'
-            }
+                    }
                 }
             }
         }
@@ -75,7 +74,7 @@ pipeline {
         stage('Tests') {
             steps {
                 // Exécuter les tests si vous en avez
-              //  sh 'php artisan test'
+                // sh 'php artisan test'
                 echo 'Tests exécutés avec succès'
             }
         }
