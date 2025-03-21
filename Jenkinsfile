@@ -20,12 +20,12 @@ pipeline {
             }
         }
 
-        stage('Installation des dépendances') {
+        stage('Installation de Composer') {
             steps {
-                // Installation des dépendances PHP avec Composer
-                sh 'composer install --no-interaction --no-progress'
-                echo 'Dépendances Laravel installées avec succès'
-            }
+                // Installer Composer
+        sh 'docker run --rm -v $(pwd):/app composer install'
+        echo 'Composer installé avec succès'
+          }
         }
 
         stage('Configuration de l\'environnement') {

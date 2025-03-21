@@ -18,13 +18,13 @@
         <p class="text-body mb-3">{{ Str::limit($product->description, 100) }}</p>
         <div class="d-flex justify-content-between">
             <a class="btn btn-sm btn-burger rounded py-2 px-4" href="{{ route('client.product.show', $product->id) }}">Détails</a>
-            @if($product->stock > 0)
-                <form action="{{ route('client.cart.add') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                    <button type="submit" class="btn btn-sm btn-dark rounded py-2 px-4">Ajouter au panier</button>
-                </form>
-            @endif
+{{--            @if($product->stock > 0)--}}
+{{--                <form action="{{ route('client.cart.add') }}" method="POST">--}}
+{{--                    @csrf--}}
+{{--                    <input type="hidden" name="product_id" value="{{ $product->id }}">--}}
+{{--                    <button type="submit" class="btn btn-sm btn-dark rounded py-2 px-4">Ajouter au panier</button>--}}
+{{--                </form>--}}
+{{--            @endif--}}
         </div>
     </div>
 </div>
