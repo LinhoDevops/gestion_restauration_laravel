@@ -34,7 +34,6 @@ class AuthController extends Controller
 
             Log::info('Utilisateur inséré : ', $user->toArray());
 
-            // Par défaut, le rôle est client pour l'interface web
             $role = Role::where('name', 'client')->first();
             if ($role) {
                 $user->assignRole($role);

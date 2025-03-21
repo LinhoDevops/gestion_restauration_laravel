@@ -5,6 +5,11 @@ pipeline {
         githubPush()
     }
 
+     docker {
+        image 'php:8.2-apache'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+
 
     environment {
         // Définir les variables d'environnement
