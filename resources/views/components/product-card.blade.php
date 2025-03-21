@@ -1,7 +1,7 @@
 <!-- components/product-card.blade.php -->
 <div class="card product-card shadow rounded overflow-hidden">
     <div class="position-relative">
-        <img w-1 class="img-fluid" src="{{ $product->image_url }}" alt="{{ $product->name }}">
+        <img class="img-fluid w-100 object-fit-cover" style="max-height: 250px;" src="{{ $product->image_url }}" alt="{{ $product->name }}">
         <small class="position-absolute start-0 top-100 translate-middle-y bg-burger text-white rounded py-1 px-3 ms-4">{{ number_format($product->price, 0, ',', ' ') }} FCFA</small>
     </div>
     <div class="p-4 mt-2">

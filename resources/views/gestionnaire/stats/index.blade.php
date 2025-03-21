@@ -33,19 +33,19 @@
                 <!-- Content -->
                 <div class="col-lg-9">
                     <div class="row g-4">
-                        <div class="col-12">
-                            <div class="bg-light rounded p-4 wow fadeInUp" data-wow-delay="0.1s">
-                                <h4 class="mb-4">Commandes par mois</h4>
-                                <canvas id="monthlyOrdersChart"></canvas>
-                            </div>
-                        </div>
+{{--                        <div class="col-12">--}}
+{{--                            <div class="bg-light rounded p-4 wow fadeInUp" data-wow-delay="0.1s">--}}
+{{--                                <h4 class="mb-4">Commandes par mois</h4>--}}
+{{--                                <canvas id="monthlyOrdersChart"></canvas>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
-                        <div class="col-12">
-                            <div class="bg-light rounded p-4 wow fadeInUp" data-wow-delay="0.3s">
-                                <h4 class="mb-4">Revenus par mois</h4>
-                                <canvas id="monthlyRevenueChart"></canvas>
-                            </div>
-                        </div>
+{{--                        <div class="col-12">--}}
+{{--                            <div class="bg-light rounded p-4 wow fadeInUp" data-wow-delay="0.3s">--}}
+{{--                                <h4 class="mb-4">Revenus par mois</h4>--}}
+{{--                                <canvas id="monthlyRevenueChart"></canvas>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
                         <div class="col-md-6">
                             <div class="bg-light rounded p-4 wow fadeInUp" data-wow-delay="0.5s">

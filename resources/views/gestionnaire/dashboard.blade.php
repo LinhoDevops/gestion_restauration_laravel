@@ -1,4 +1,3 @@
-<!-- gestionnaire/dashboard.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Tableau de bord')
@@ -155,7 +154,7 @@
             // Marquer toutes les notifications comme lues
             $('#markAllAsRead').click(function() {
                 $.ajax({
-                    url: '/notifications/read',
+                    url: '{{ route("gestionnaire.notifications.read") }}',
                     type: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -169,7 +168,7 @@
             function loadDashboardData() {
                 // Charger les statistiques
                 $.ajax({
-                    url: '/gestionnaire/stats/orders/daily',
+                    url: '{{ route("gestionnaire.stats.orders.daily") }}',
                     type: 'GET',
                     success: function(response) {
                         if (response.length > 0) {
@@ -179,7 +178,7 @@
                 });
 
                 $.ajax({
-                    url: '/gestionnaire/stats/revenue/daily',
+                    url: '{{ route("gestionnaire.stats.revenue.daily") }}',
                     type: 'GET',
                     success: function(response) {
                         if (response.length > 0) {
@@ -190,13 +189,17 @@
 
                 // Charger le nombre de produits en stock
                 $.ajax({
-                    url: '/products',
+                    url: '{{ route("gestionnaire.products.index") }}',
                     type: 'GET',
+                    dataType: 'json',
+                    headers: {
+                        'Accept': 'application/json'
+                    },
                     success: function(response) {
                         let inStockCount = 0;
                         let lowStockHtml = '';
 
-                        response.forEach(function(product) {
+                        response.data.forEach(function(product) {
                             if (product.stock > 0) {
                                 inStockCount++;
                             }
@@ -208,7 +211,7 @@
                                     <td>${formatPrice(product.price)} FCFA</td>
                                     <td><span class="badge bg-warning">${product.stock}</span></td>
                                     <td>
-                                        <a href="/gestionnaire/products/${product.id}/edit" class="btn btn-sm btn-burger">
+                                        <a href="{{ url('/gestionnaire/products') }}/${product.id}/edit" class="btn btn-sm btn-burger">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                     </td>
@@ -229,13 +232,17 @@
 
                 // Charger les commandes récentes
                 $.ajax({
-                    url: '/orders',
+                    url: '{{ route("gestionnaire.orders.index") }}',
                     type: 'GET',
+                    dataType: 'json',
+                    headers: {
+                        'Accept': 'application/json'
+                    },
                     success: function(response) {
                         let recentOrdersHtml = '';
                         let completedCount = 0;
 
-                        const recentOrders = response.slice(0, 5);
+                        const recentOrders = response.data.slice(0, 5);
 
                         recentOrders.forEach(function(order) {
                             if (order.status === 'payée') {
@@ -264,7 +271,7 @@
                                 <td><span class="badge ${statusClass[order.status] || 'bg-secondary'}">${statusText[order.status] || order.status}</span></td>
                                 <td>${formatDate(order.created_at)}</td>
                                 <td>
-                                    <a href="/gestionnaire/orders/${order.id}" class="btn btn-sm btn-burger">
+                                    <a href="{{ url('/gestionnaire/orders') }}/${order.id}" class="btn btn-sm btn-burger">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                 </td>
@@ -284,7 +291,7 @@
 
                 // Charger les notifications
                 $.ajax({
-                    url: '/notifications',
+                    url: '{{ route("gestionnaire.notifications") }}',
                     type: 'GET',
                     success: function(response) {
                         let notificationsHtml = '';
@@ -303,7 +310,7 @@
                                         <small>${dateFormatted}</small>
                                     </div>
                                     <p class="mb-1">${notification.data.message}</p>
-                                    <a href="/gestionnaire/orders/${notification.data.order_id}" class="text-burger">Voir la commande</a>
+                                    <a href="{{ url('/gestionnaire/orders') }}/${notification.data.order_id}" class="text-burger">Voir la commande</a>
                                 </div>
                             `;
                             });

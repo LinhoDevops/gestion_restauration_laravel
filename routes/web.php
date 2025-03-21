@@ -55,7 +55,6 @@ Route::middleware('auth')->group(function () {
 
         // Commandes
         Route::get('/orders', [ClientController::class, 'myOrders'])->name('orders');
-        Route::get('/client/orders', [ClientController::class, 'myOrders'])->name('client.orders')->middleware('auth');
         Route::get('/orders/{id}', [ClientController::class, 'orderDetail'])->name('order.show');
         Route::post('/orders', [OrderController::class, 'store'])->name('order.store');
     });
@@ -68,7 +67,6 @@ Route::middleware('auth')->group(function () {
         })->name('dashboard');
 
         // Gestion des produits
-        Route::get('/products', [ProductController::class, 'index'])->middleware('role:gestionnaire');
         Route::get('/products', [ProductController::class, 'index'])->name('products.index');
         Route::get('/products/create', function () {
             return view('gestionnaire.products.create');
