@@ -42,15 +42,15 @@ pipeline {
             }
         }
 
-        tage('Installation des dépendances') {
+        stage('Installation des dépendances') {
             steps {
                 script {
                     def composerInstalled = sh(script: 'which composer || echo "not found"', returnStdout: true).trim()
-                    if (!composerInstalled.contains("not found")) {
+            if (!composerInstalled.contains("not found")) {
                         sh 'composer install --no-interaction --no-progress'
-                    } else {
+            } else {
                         sh './composer install --no-interaction --no-progress'
-                    }
+            }
                 }
             }
         }
