@@ -68,6 +68,7 @@ Route::middleware('auth')->group(function () {
         })->name('dashboard');
 
         // Gestion des produits
+        Route::get('/products', [ProductController::class, 'index'])->middleware('role:gestionnaire');
         Route::get('/products', [ProductController::class, 'index'])->name('products.index');
         Route::get('/products/create', function () {
             return view('gestionnaire.products.create');

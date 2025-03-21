@@ -63,9 +63,7 @@
                                 @foreach($products as $product)
                                     <tr>
                                         <td>
-                                            <img src="{{ asset($product->image ?? 'img/placeholder.jpg') }}" alt="{{ $product->name }}" style="width: 50px; height: 50px; object-fit: cover;">
-                                        </td>
-                                        <td>{{ $product->name }}</td>
+                                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}" style="width: 50px; height: 50px; object-fit: cover;">                                        <td>{{ $product->name }}</td>
                                         <td>{{ number_format($product->price, 0, ',', ' ') }} FCFA</td>
                                         <td>
                                             @if($product->stock > 5)

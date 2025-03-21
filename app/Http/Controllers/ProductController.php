@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller
 {
     public function index() {
-        return response()->json(Product::where('is_active', true)->get());
+        $products = Product::where('is_active', true)->paginate(10);
+        return view('gestionnaire.products.index', compact('products'));
     }
 
     public function store(Request $request) {
@@ -20,23 +21,25 @@ class ProductController extends Controller
             'image' => 'nullable|image|max:2048',
         ]);
 
-        $imagePath = $request->file('image') ? $request->file('image')->store('products', 'public') : null;
+        $imagePath = $request->file('image')
+            ? $request->file('image')->store('products', 'public')
+            : null;
 
         $product = Product::create([
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
-            'image' => $imagePath,
+            'image' => $imagePath ? basename($imagePath) : null, // Stockez uniquement le nom du fichier
             'stock' => $request->stock,
             'is_active' => true,
         ]);
 
-        return response()->json($product, 201);
+        return redirect()->route('gestionnaire.products.index')->with('success', 'Produit ajouté avec succès');
     }
 
     public function update(Request $request, $id) {
         $product = Product::findOrFail($id);
-        
+
         $request->validate([
             'name' => 'string|max:255',
             'price' => 'numeric|min:0',
@@ -44,23 +47,43 @@ class ProductController extends Controller
             'image' => 'nullable|image|max:2048',
         ]);
 
-        if ($request->hasFile('image')) {
-            if ($product->image) Storage::disk('public')->delete($product->image);
-            $product->image = $request->file('image')->store('products', 'public');
+        try {
+            if ($request->hasFile('image')) {
+                // Supprimer l'ancienne image si elle existe
+                if ($product->image) {
+                    Storage::disk('public')->delete('products/' . $product->image);
+                }
+
+                // Stocker la nouvelle image
+                $imagePath = $request->file('image')->store('products', 'public');
+
+                // Mettre à jour le chemin de l'image (uniquement le nom du fichier)
+                $product->image = basename($imagePath);
+            }
+
+            // Mettre à jour les autres champs
+            $product->update($request->except('image'));
+
+            return redirect()->route('gestionnaire.products.index')->with('success', 'Produit mis à jour avec succès');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Erreur lors de la mise à jour du produit: ' . $e->getMessage());
         }
-
-        $product->update($request->except('image'));
-
-        return response()->json($product);
     }
-
     public function destroy($id) {
         $product = Product::findOrFail($id);
-        
-        if ($product->image) Storage::disk('public')->delete($product->image);
 
-        $product->delete();
+        try {
+            // Supprimer l'image si elle existe
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
 
-        return response()->json(['message' => 'Produit supprimé']);
+            // Supprimer le produit
+            $product->delete();
+
+            return redirect()->route('gestionnaire.products.index')->with('success', 'Produit supprimé avec succès');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Erreur lors de la suppression du produit');
+        }
     }
 }

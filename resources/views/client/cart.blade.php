@@ -59,8 +59,7 @@
                                         <tr>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="{{ asset($item['product']->image ?? 'img/placeholder.jpg') }}" alt="{{ $item['product']->name }}" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
-                                                    <a href="{{ route('client.product.show', $item['product']->id) }}">{{ $item['product']->name }}</a>
+                                                    <img src="{{ $item['product']->image_url }}" alt="{{ $item['product']->name }}" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">                                                    <a href="{{ route('client.product.show', $item['product']->id) }}">{{ $item['product']->name }}</a>
                                                 </div>
                                             </td>
                                             <td>{{ number_format($item['product']->price, 0, ',', ' ') }} FCFA</td>

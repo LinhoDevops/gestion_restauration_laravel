@@ -228,7 +228,7 @@
                         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.{{ $loop->iteration % 3 + 1 }}s">
                             <div class="card product-card shadow rounded overflow-hidden">
                                 <div class="position-relative">
-                                    <img class="img-fluid" src="{{ asset($product->image ?? 'img/placeholder.jpg') }}" alt="{{ $product->name }}">
+                                    <img  class="img-fluid" src="{{ $product->image_url }}" alt="{{ $product->name }}">
                                     <small class="position-absolute start-0 top-100 translate-middle-y bg-burger text-white rounded py-1 px-3 ms-4">{{ number_format($product->price, 0, ',', ' ') }} FCFA</small>
                                 </div>
                                 <div class="p-4 mt-2">

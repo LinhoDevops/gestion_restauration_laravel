@@ -29,8 +29,7 @@
                     <div id="product-carousel" class="carousel slide mb-5 wow fadeIn" data-bs-ride="carousel" data-wow-delay="0.1s">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <img class="w-100" src="{{ asset($product->image ?? 'img/placeholder.jpg') }}" alt="{{ $product->name }}">
-                            </div>
+                                <img class="w-100" src="{{ $product->image_url }}" alt="{{ $product->name }}">                            </div>
                         </div>
                     </div>
 
@@ -92,8 +91,7 @@
 
                         @foreach($otherProducts as $otherProduct)
                             <div class="d-flex align-items-center mb-3">
-                                <img class="flex-shrink-0 rounded" src="{{ asset($otherProduct->image ?? 'img/placeholder.jpg') }}" alt="{{ $otherProduct->name }}" style="width: 80px; height: 80px; object-fit: cover;">
-                                <div class="ps-3">
+                                <img class="flex-shrink-0 rounded" src="{{ $otherProduct->image_url }}" alt="{{ $otherProduct->name }}" style="width: 80px; height: 80px; object-fit: cover;">                                <div class="ps-3">
                                     <h6 class="fw-bold mb-1">{{ $otherProduct->name }}</h6>
                                     <small>{{ number_format($otherProduct->price, 0, ',', ' ') }} FCFA</small><br>
                                     <a href="{{ route('client.product.show', $otherProduct->id) }}" class="text-burger">Voir les détails</a>

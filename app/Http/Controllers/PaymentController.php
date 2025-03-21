@@ -14,7 +14,8 @@ class PaymentController extends Controller
 {
     // Liste des paiement
     public function index() {
-        return response()->json(Payment::with('order')->get());
+        $payments = Payment::with('order.user')->paginate(10);
+        return view('gestionnaire.payments.index', compact('payments'));
     }
 
     // Enregistrer un paiement
