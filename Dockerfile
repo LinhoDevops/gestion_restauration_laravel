@@ -1,59 +1,44 @@
-# Utiliser une image PHP officielle comme base
-FROM php:8.2-fpm
+FROM php:8.2-apache
 
-# Définir le répertoire de travail
-WORKDIR /var/www/html
-
-# Installer les dépendances système nécessaires
+# Installer les dépendances système
 RUN apt-get update && apt-get install -y \
     git \
     curl \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
-    libzip-dev \
-    libpq-dev \
     zip \
     unzip \
-    nodejs \
-    npm
+    libzip-dev
 
-# Nettoyer le cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Installer les extensions PHP nécessaires
+RUN apt-get install -y libpq-dev \
+    && docker-php-ext-install pdo_pgsql pgsql mbstring exif pcntl bcmath gd zip
 
-# Installer les extensions PHP
-RUN docker-php-ext-install \
-    pdo_mysql \
-    pdo_pgsql \
-    mbstring \
-    exif \
-    pcntl \
-    bcmath \
-    gd \
-    zip
+# Activer le module rewrite d'Apache
+RUN a2enmod rewrite
 
 # Installer Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copier les fichiers du projet
+# Définir le répertoire de travail
+WORKDIR /var/www/html
+
+# Copier les fichiers de l'application
 COPY . /var/www/html
 
-# Installer les dépendances PHP
-RUN composer install --no-interaction --no-plugins --no-scripts
+# Installer les dépendances
+RUN composer install --no-interaction --no-dev --optimize-autoloader
 
-# Installer les dépendances Node.js
-RUN npm install && npm run build
+# Configurer les permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage
 
-# Générer la clé d'application
-RUN php artisan key:generate
+# Configurer le virtual host Apache
+COPY docker/vhost.conf /etc/apache2/sites-available/000-default.conf
 
-# Définir les permissions
-RUN chown -R www-data:www-data \
-    /var/www/html/storage \
-    /var/www/html/bootstrap/cache
+# Exposer le port 80
+EXPOSE 80
 
-# Exposer le port 9000
-EXPOSE 9999
-
-# Commande par défaut
-CMD ["php-fpm"]
+# Démarrer Apache
+CMD ["apache2-foreground"]
